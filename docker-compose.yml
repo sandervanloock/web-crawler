@@ -1,0 +1,28 @@
+version: '3'
+services:
+  kibana:
+    image: kibana:6.5.2
+    ports:
+    - "80:5601"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.3
+    volumes:
+    - ./docker/data:/usr/share/elasticsearch/data
+    ports:
+     - "9200:9200"
+     - "9300:9300"
+    environment:
+    - "discovery.type=single-node"
+    links:
+    - kibana
+  norconex:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile.norconex
+    volumes:
+    - ./norconex-collector-http-2.8.1:/docker/crawler
+    entrypoint: "/docker/crawler/entrypoint.sh"
+    command: "/docker/crawler/start.sh"
+    links:
+      - elasticsearch
+      - kibana

@@ -1,0 +1,10 @@
+FROM java:8-jdk
+
+ENV DOCKER_HOME /docker
+ENV CRAWLER_HOME /docker/crawler
+RUN groupadd crawler && useradd -g crawler crawler
+
+RUN mkdir -p ${DOCKER_HOME}
+RUN mkdir -p ${CRAWLER_HOME}
+
+RUN chown -R crawler:crawler ${DOCKER_HOME} && chmod -R 755 ${DOCKER_HOME}
