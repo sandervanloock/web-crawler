@@ -15,14 +15,3 @@ services:
     - "discovery.type=single-node"
     links:
     - kibana
-  norconex:
-    build:
-      context: ./
-      dockerfile: ./docker/Dockerfile.norconex
-    volumes:
-    - ./norconex-collector-http-2.8.1:/docker/crawler
-    entrypoint: "/docker/crawler/entrypoint.sh"
-    command: "/docker/crawler/start.sh"
-    links:
-      - elasticsearch
-      - kibana
