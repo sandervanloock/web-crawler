@@ -1,0 +1,15 @@
+com.norconex.jefmon
+com.norconex.jefmon.about
+com.norconex.jefmon.home
+com.norconex.jefmon.instance
+com.norconex.jefmon.instance.action
+com.norconex.jefmon.instance.action.impl
+com.norconex.jefmon.instance.tree
+com.norconex.jefmon.instances
+com.norconex.jefmon.markup.head
+com.norconex.jefmon.model
+com.norconex.jefmon.server
+com.norconex.jefmon.settings.initial
+com.norconex.jefmon.settings.panels
+com.norconex.jefmon.settings.update
+com.norconex.jefmon.ws

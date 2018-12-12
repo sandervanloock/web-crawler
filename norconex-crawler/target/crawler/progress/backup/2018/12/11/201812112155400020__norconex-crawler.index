@@ -1,0 +1,1 @@
+|<?xml version="1.0" encoding="UTF-8" ?><suite-index><logManager class="com.norconex.jef4.log.FileLogManager"><logDir>C:\Projects\web-crawler\target\crawler\logs</logDir></logManager><statusStore class="com.norconex.jef4.status.FileJobStatusStore"><statusDir>C:\Projects\web-crawler\target\crawler\progress</statusDir></statusStore><job name="norconex-crawler"></job></suite-index>
