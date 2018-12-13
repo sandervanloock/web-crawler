@@ -25,9 +25,6 @@
     #set($searchUrl = "http://elasticsearch:9200")
     #set($httpClientFactory = "${http}.client.impl.GenericHttpClientFactory")
 
-    <progressDir>../crawlers/norconex/progress</progressDir>
-    <logsDir>../crawlers/norconex/logs</logsDir>
-
     <crawlerDefaults>
         <referenceFilters>
             <filter class="$filterExtension" onMatch="exclude">jpg,gif,png,ico,css,js</filter>
@@ -39,8 +36,7 @@
                 removeDotSegments
             </normalizations>
         </urlNormalizer>
-        <maxDepth>0</maxDepth>
-        <workDir>../crawlers/norconex/workDir</workDir>
+        <maxDepth>2</maxDepth>
         <!-- We know we don't want to crawl the entire site, so ignore sitemap. -->
         <sitemapResolverFactory ignore="true"/>
     </crawlerDefaults>
@@ -49,20 +45,6 @@
             <startURLs>
                 <url>https://www.foreach.be</url>
             </startURLs>
-
-            <httpClientFactory class="com.norconex.collector.http.client.impl.GenericHttpClientFactory">
-                <trustAllSSLCertificates>true</trustAllSSLCertificates>
-            </httpClientFactory>
-
-            <committer class="$committerClass">
-                <nodes>$searchUrl</nodes>
-                <indexName>norconex</indexName>
-                <typeName>web</typeName>
-                <queueDir>../crawlers/norconex/committer-queue</queueDir>
-                <targetContentField>body</targetContentField>
-                <queueSize>100</queueSize>
-                <commitBatchSize>500</commitBatchSize>
-            </committer>
         </crawler>
     </crawlers>
 </httpcollector>
