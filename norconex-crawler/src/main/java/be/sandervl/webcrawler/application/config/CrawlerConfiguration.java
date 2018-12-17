@@ -5,8 +5,10 @@ import com.norconex.collector.http.HttpCollectorConfig;
 import com.norconex.collector.http.crawler.HttpCrawlerConfig;
 import com.norconex.collector.http.crawler.URLCrawlScopeStrategy;
 import com.norconex.committer.core.ICommitter;
+import com.norconex.committer.elasticsearch.ElasticsearchCommitter;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.client.HttpClient;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +21,7 @@ import java.util.Arrays;
 public class CrawlerConfiguration {
 
     private final HttpClient httpClient;
-    private final ICommitter committer;
+    private final BeanFactory beanFactory;
 
     @Qualifier("xmlCollectorConfiguration")
     private final HttpCollectorConfig xmlCollectorConfig;
@@ -36,8 +38,10 @@ public class CrawlerConfiguration {
     private void setDefaultCrawlerConfigs(ICrawlerConfig config) {
         if (config instanceof HttpCrawlerConfig) {
             HttpCrawlerConfig crawlerConfig = (HttpCrawlerConfig) config;
-            crawlerConfig.setId("norconex-crawler");
+            crawlerConfig.setId(config.getId());
             crawlerConfig.setHttpClientFactory(s -> httpClient);
+            ElasticsearchCommitter committer = beanFactory.getBean(ElasticsearchCommitter.class);
+            committer.setIndexName(config.getId());
             crawlerConfig.setCommitter(committer);
 
             URLCrawlScopeStrategy scopeStrategy = new URLCrawlScopeStrategy();

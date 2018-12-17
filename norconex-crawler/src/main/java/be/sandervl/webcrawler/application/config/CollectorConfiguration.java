@@ -23,7 +23,6 @@ public class CollectorConfiguration {
         if (xmlCollectorConfig == null) {
             config = new HttpCollectorConfig();
         }
-        config.setId("norconex");
         config.setCrawlerConfigs(crawlerConfigurations);
         config.setLogsDir("../data/crawler/logs");
         config.setProgressDir("../data/crawler/progress");
