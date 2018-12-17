@@ -4,7 +4,6 @@ import com.norconex.collector.core.crawler.ICrawlerConfig;
 import com.norconex.collector.http.HttpCollectorConfig;
 import com.norconex.collector.http.crawler.HttpCrawlerConfig;
 import com.norconex.collector.http.crawler.URLCrawlScopeStrategy;
-import com.norconex.committer.core.ICommitter;
 import com.norconex.committer.elasticsearch.ElasticsearchCommitter;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.client.HttpClient;
@@ -40,6 +39,9 @@ public class CrawlerConfiguration {
             HttpCrawlerConfig crawlerConfig = (HttpCrawlerConfig) config;
             crawlerConfig.setId(config.getId());
             crawlerConfig.setHttpClientFactory(s -> httpClient);
+            crawlerConfig.setMaxDepth(CrawlerConstants.MAX_DEPTH);
+            crawlerConfig.setMaxDocuments(CrawlerConstants.MAX_DOCUMENTS);
+
             ElasticsearchCommitter committer = beanFactory.getBean(ElasticsearchCommitter.class);
             committer.setIndexName(config.getId());
             crawlerConfig.setCommitter(committer);
