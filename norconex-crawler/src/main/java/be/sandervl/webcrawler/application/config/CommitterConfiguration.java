@@ -6,17 +6,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
 @Configuration
-@Scope("prototype")
 public class CommitterConfiguration {
 
     @Bean
+    @Scope("prototype")
     public ElasticsearchCommitter getElasticSearchCommitter() {
         ElasticsearchCommitter committer = new ElasticsearchCommitter();
         committer.setTypeName("web");
         committer.setTargetContentField(CrawlerConstants.TARGET_CONTENT_FIELD);
         committer.setNodes(CrawlerConstants.ELASTICSEARCH_URL);
         committer.setCommitBatchSize(CrawlerConstants.COMMIT_BATCH_SIZE);
-        committer.setQueueDir("../data/committer");
+        committer.setQueueDir(CrawlerConstants.QUEUE_DIRECTORY);
         committer.setFixBadIds(true);
         return committer;
     }

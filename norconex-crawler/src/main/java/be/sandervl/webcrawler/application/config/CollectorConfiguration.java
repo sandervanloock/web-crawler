@@ -24,8 +24,8 @@ public class CollectorConfiguration {
             config = new HttpCollectorConfig();
         }
         config.setCrawlerConfigs(crawlerConfigurations);
-        config.setLogsDir("../data/crawler/logs");
-        config.setProgressDir("../data/crawler/progress");
+        config.setLogsDir(CrawlerConstants.LOGS_DIRECTORY);
+        config.setProgressDir(CrawlerConstants.PROGRESS_DIRECTORY);
         return new HttpCollector(config);
     }
 }

@@ -19,7 +19,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public class CrawlerConfiguration {
 
-    private final HttpClient httpClient;
     private final BeanFactory beanFactory;
 
     @Qualifier("xmlCollectorConfiguration")
@@ -38,7 +37,7 @@ public class CrawlerConfiguration {
         if (config instanceof HttpCrawlerConfig) {
             HttpCrawlerConfig crawlerConfig = (HttpCrawlerConfig) config;
             crawlerConfig.setId(config.getId());
-            crawlerConfig.setHttpClientFactory(s -> httpClient);
+            crawlerConfig.setHttpClientFactory(s -> beanFactory.getBean(HttpClient.class));
             crawlerConfig.setMaxDepth(CrawlerConstants.MAX_DEPTH);
             crawlerConfig.setMaxDocuments(CrawlerConstants.MAX_DOCUMENTS);
 
@@ -51,7 +50,7 @@ public class CrawlerConfiguration {
             scopeStrategy.setStayOnPort(true);
             scopeStrategy.setStayOnProtocol(true);
             crawlerConfig.setUrlCrawlScopeStrategy(scopeStrategy);
-            crawlerConfig.setWorkDir(new File("../data/crawler/work"));
+            crawlerConfig.setWorkDir(new File(CrawlerConstants.WORK_DIRECTORY));
         }
     }
 }

@@ -13,6 +13,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -22,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 public class WebConfiguration {
 
     @Bean
+    @Scope("prototype")
     public HttpClient httpClient() {
         final SSLConnectionSocketFactory sslsf;
         try {
