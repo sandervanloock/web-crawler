@@ -1,36 +1,38 @@
-package be.sandervl.webcrawler.application.config;
+package be.sandervl.webcrawler.application;
 
+import be.sandervl.webcrawler.application.config.CrawlerConstants;
+import com.norconex.collector.core.CollectorConfigLoader;
 import com.norconex.collector.core.crawler.ICrawlerConfig;
 import com.norconex.collector.http.HttpCollectorConfig;
 import com.norconex.collector.http.crawler.HttpCrawlerConfig;
 import com.norconex.collector.http.crawler.URLCrawlScopeStrategy;
 import com.norconex.committer.elasticsearch.ElasticsearchCommitter;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.client.HttpClient;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
-@Configuration
+@Component
 @RequiredArgsConstructor
-public class CrawlerConfiguration {
+public class CollectorConfigurationFactory {
 
     private final BeanFactory beanFactory;
 
-    @Qualifier("xmlCollectorConfiguration")
-    private final HttpCollectorConfig xmlCollectorConfig;
-
-    @Bean
-    public ICrawlerConfig[] crawlerConfigs() {
-        if (xmlCollectorConfig.getCrawlerConfigs().length == 0) {
-            xmlCollectorConfig.setCrawlerConfigs(new HttpCrawlerConfig());
-        }
-        Arrays.stream(xmlCollectorConfig.getCrawlerConfigs()).forEach(this::setDefaultCrawlerConfigs);
-        return xmlCollectorConfig.getCrawlerConfigs();
+    public HttpCollectorConfig createFromString(String input) throws IOException {
+        File configXml = File.createTempFile(RandomStringUtils.randomAlphanumeric(10), "xml");
+        IOUtils.copy(new ByteArrayInputStream(input.getBytes()), new FileOutputStream(configXml));
+        HttpCollectorConfig httpCollectorConfig = (HttpCollectorConfig) new CollectorConfigLoader(HttpCollectorConfig.class)
+                .loadCollectorConfig(configXml);
+        Arrays.stream(httpCollectorConfig.getCrawlerConfigs()).forEach(this::setDefaultCrawlerConfigs);
+        return httpCollectorConfig;
     }
 
     private void setDefaultCrawlerConfigs(ICrawlerConfig config) {

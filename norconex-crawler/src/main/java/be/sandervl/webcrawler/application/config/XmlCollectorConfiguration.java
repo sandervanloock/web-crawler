@@ -16,7 +16,7 @@ public class XmlCollectorConfiguration {
     @Qualifier("xmlCollectorConfiguration")
     public HttpCollectorConfig xmlCollectorConfig() throws IOException {
         return (HttpCollectorConfig) new CollectorConfigLoader(HttpCollectorConfig.class)
-                .loadCollectorConfig(new ClassPathResource("crawler-config.xml").getFile(), null);
+                .loadCollectorConfig(new ClassPathResource("crawler-config.xml").getFile());
     }
 
 }

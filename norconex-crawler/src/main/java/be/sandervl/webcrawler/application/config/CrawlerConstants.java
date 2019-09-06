@@ -5,7 +5,7 @@ public interface CrawlerConstants {
 
     int MAX_DEPTH = 2;
     int MAX_DOCUMENTS = 250;
-    int COMMIT_BATCH_SIZE = 10;
+    int COMMIT_BATCH_SIZE = 1;
 
     String TARGET_CONTENT_FIELD = "body";
 
