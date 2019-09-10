@@ -1,6 +1,6 @@
 package be.sandervl.webcrawler.application.controllers;
 
-import be.sandervl.webcrawler.application.CollectorConfigurationFactory;
+import be.sandervl.webcrawler.application.HttpCollectorFactory;
 import com.norconex.collector.http.HttpCollector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/crawler")
 @RequiredArgsConstructor
 public class CrawlerController {
 
-    private final CollectorConfigurationFactory collectorConfigurationFactory;
+    private final HttpCollectorFactory httpCollectorFactory;
 
     /**
      * Start a crawl with the given XML-config as request body
@@ -26,9 +27,8 @@ public class CrawlerController {
      */
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
     public String start(@RequestBody String config) throws IOException {
-        HttpCollector httpCollector = new HttpCollector(collectorConfigurationFactory.createFromString(config));
-        httpCollector.start(false);
-        //httpCollector.getJobSuite().getJobStatus()
+        HttpCollector httpCollector = httpCollectorFactory.createFromConfigString(config);
+        CompletableFuture.runAsync(() -> httpCollector.start(true));
         return httpCollector.getId();
     }
 }

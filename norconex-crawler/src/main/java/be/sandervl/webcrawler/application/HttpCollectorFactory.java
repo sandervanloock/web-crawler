@@ -3,6 +3,7 @@ package be.sandervl.webcrawler.application;
 import be.sandervl.webcrawler.application.config.CrawlerConstants;
 import com.norconex.collector.core.CollectorConfigLoader;
 import com.norconex.collector.core.crawler.ICrawlerConfig;
+import com.norconex.collector.http.HttpCollector;
 import com.norconex.collector.http.HttpCollectorConfig;
 import com.norconex.collector.http.crawler.HttpCrawlerConfig;
 import com.norconex.collector.http.crawler.URLCrawlScopeStrategy;
@@ -22,11 +23,18 @@ import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
-public class CollectorConfigurationFactory {
+public class HttpCollectorFactory {
 
     private final BeanFactory beanFactory;
 
-    public HttpCollectorConfig createFromString(String input) throws IOException {
+    public HttpCollector createFromConfigString(String input) throws IOException {
+        HttpCollectorConfig config = createFromString(input);
+        config.setLogsDir(CrawlerConstants.LOGS_DIRECTORY);
+        config.setProgressDir(CrawlerConstants.PROGRESS_DIRECTORY);
+        return new HttpCollector(config);
+    }
+
+    private HttpCollectorConfig createFromString(String input) throws IOException {
         File configXml = File.createTempFile(RandomStringUtils.randomAlphanumeric(10), "xml");
         IOUtils.copy(new ByteArrayInputStream(input.getBytes()), new FileOutputStream(configXml));
         HttpCollectorConfig httpCollectorConfig = (HttpCollectorConfig) new CollectorConfigLoader(HttpCollectorConfig.class)

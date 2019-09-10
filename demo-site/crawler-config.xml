@@ -62,7 +62,7 @@
             </filter>
             <documentFilters>
                 <filter class="$regexFilterExtension" onMatch="include">
-                    http://localhost:8080/.*/detail.*
+                    <regex>.*/detail/.*</regex>
                 </filter>
             </documentFilters>
             <importer>
