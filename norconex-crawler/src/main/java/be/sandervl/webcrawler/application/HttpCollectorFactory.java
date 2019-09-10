@@ -19,6 +19,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 @Component
@@ -60,7 +62,7 @@ public class HttpCollectorFactory {
             scopeStrategy.setStayOnPort(true);
             scopeStrategy.setStayOnProtocol(true);
             crawlerConfig.setUrlCrawlScopeStrategy(scopeStrategy);
-            crawlerConfig.setWorkDir(new File(CrawlerConstants.WORK_DIRECTORY));
+            crawlerConfig.setWorkDir(new File(CrawlerConstants.WORK_DIRECTORY+"/"+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyddMMhhmmss"))));
         }
     }
 }

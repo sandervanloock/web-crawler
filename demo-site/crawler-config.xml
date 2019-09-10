@@ -16,6 +16,10 @@
 -->
 <httpcollector id="web-crawler">
 
+    #set($core      = "com.norconex.collector.core")
+    #set($http      = "com.norconex.collector.http")
+    #set($committer = "com.norconex.committer")
+
     #set($http = "com.norconex.collector.http")
     #set($core = "com.norconex.collector.core")
     #set($urlNormalizer = "${http}.url.impl.GenericURLNormalizer")
@@ -56,24 +60,23 @@
                     </tags>
                 </extractor>
             </linkExtractors>
-            <filter class="$regexFilterExtension"
-                    onMatch="include">
-                http://localhost:8080/.*/detail.*
-            </filter>
-            <documentFilters>
+            <metadataFilters>
                 <filter class="$regexFilterExtension" onMatch="include">
-                    <regex>.*/detail/.*</regex>
+                    .*/detail.*
                 </filter>
-            </documentFilters>
+            </metadataFilters>
             <importer>
                 <preParseHandlers>
                     <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger">
                         <dom selector="h1" toField="name" extract="text"/>
                     </tagger>
                     <tagger class="com.norconex.importer.handler.tagger.impl.CurrentDateTagger"
-                            field="crawl_date" format="yyyyMMdd'T'HHmmss.SSSZ"/>
+                            field="crawl_date" format="dd/MM/yyyy HH:mm:ss"/>
                     <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger">
                         <dom selector="p" toField="description" extract="text"/>
+                    </tagger>
+                    <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger">
+                        <dom selector="address" toField="address" extract="text"/>
                     </tagger>
                 </preParseHandlers>
             </importer>
