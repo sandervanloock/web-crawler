@@ -27,3 +27,4 @@
 /docker/data/
 /committer-queue/
 /work/
+data/**

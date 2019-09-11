@@ -31,7 +31,7 @@ public class HttpCollectorFactory {
 
     public HttpCollector createFromConfigString(String input) throws IOException {
         HttpCollectorConfig config = createFromString(input);
-        config.setLogsDir(CrawlerConstants.LOGS_DIRECTORY);
+        config.setLogsDir(CrawlerConstants.LOGS_DIRECTORY + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyddMMhhmmss")));
         config.setProgressDir(CrawlerConstants.PROGRESS_DIRECTORY);
         return new HttpCollector(config);
     }
@@ -62,7 +62,7 @@ public class HttpCollectorFactory {
             scopeStrategy.setStayOnPort(true);
             scopeStrategy.setStayOnProtocol(true);
             crawlerConfig.setUrlCrawlScopeStrategy(scopeStrategy);
-            crawlerConfig.setWorkDir(new File(CrawlerConstants.WORK_DIRECTORY+"/"+LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyddMMhhmmss"))));
+            crawlerConfig.setWorkDir(new File(CrawlerConstants.WORK_DIRECTORY + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyddMMhhmmss"))));
         }
     }
 }

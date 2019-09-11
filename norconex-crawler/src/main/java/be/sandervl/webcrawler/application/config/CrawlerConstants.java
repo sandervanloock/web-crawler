@@ -3,9 +3,9 @@ package be.sandervl.webcrawler.application.config;
 public interface CrawlerConstants {
     String ELASTICSEARCH_URL = "http://localhost:9200";
 
-    int MAX_DEPTH = 2;
-    int MAX_DOCUMENTS = 250;
-    int COMMIT_BATCH_SIZE = 1;
+    int MAX_DEPTH = 10;
+    int MAX_DOCUMENTS = 1000;
+    int COMMIT_BATCH_SIZE = 3;
 
     String TARGET_CONTENT_FIELD = "body";
 
