@@ -67,18 +67,24 @@
             </metadataFilters>
             <importer>
                 <preParseHandlers>
+                    <splitter class="com.norconex.importer.handler.splitter.impl.DOMSplitter"
+                              selector=".review-parent"/>
                     <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger">
                         <dom selector="h1" toField="name" extract="text"/>
+                        <dom selector="p" toField="description" extract="text"/>
+                        <dom selector="address" toField="address" extract="text"/>
+                        <dom selector=".review" toField="review" extract="text"/>
                     </tagger>
                     <tagger class="com.norconex.importer.handler.tagger.impl.CurrentDateTagger"
                             field="crawl_date" format="dd/MM/yyyy HH:mm:ss"/>
-                    <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger">
-                        <dom selector="p" toField="description" extract="text"/>
-                    </tagger>
-                    <tagger class="com.norconex.importer.handler.tagger.impl.DOMTagger">
-                        <dom selector="address" toField="address" extract="text"/>
-                    </tagger>
                 </preParseHandlers>
+                <postParseHandlers>
+                    <tagger class="com.norconex.importer.handler.tagger.impl.DeleteTagger">
+                        <fieldsRegex>
+                            (^[Xx]-.*)|(^collector\..*)|(^document\..*)|(^Content-.*)|Connection|(^Accept-.*)|Server|Date|^dc:.*
+                        </fieldsRegex>
+                    </tagger>
+                </postParseHandlers>
             </importer>
         </crawler>
     </crawlers>

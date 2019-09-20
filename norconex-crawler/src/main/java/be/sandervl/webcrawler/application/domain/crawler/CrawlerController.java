@@ -1,4 +1,4 @@
-package be.sandervl.webcrawler.application.controllers;
+package be.sandervl.webcrawler.application.domain.crawler;
 
 import be.sandervl.webcrawler.application.HttpCollectorFactory;
 import com.norconex.collector.http.HttpCollector;
