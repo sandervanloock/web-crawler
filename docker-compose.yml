@@ -1,13 +1,13 @@
 version: '3'
 services:
   kibana:
-    image: kibana:6.5.2
+    image: kibana:7.10.1
     ports:
       - "80:5601"
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.5.3
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
     volumes:
-      - ./data/elasticsearch:/usr/share/elasticsearch/data
+      - ./elasticsearch:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -15,9 +15,3 @@ services:
       - "discovery.type=single-node"
     links:
       - kibana
-  demo-site:
-    image: nginx
-    volumes:
-      - ./demo-site:/usr/share/nginx/html:ro
-    ports:
-      - "8080:80"

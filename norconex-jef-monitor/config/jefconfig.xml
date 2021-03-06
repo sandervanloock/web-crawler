@@ -1,13 +1,1 @@
-<?xml version="1.0" ?>
-<jefmon-config>
-    <instance-name>web-crawler</instance-name>
-    <default-refresh-interval>5</default-refresh-interval>
-    <remote-instances></remote-instances>
-    <monitored-paths>
-        <path>C:\Projects\web-crawler\data\crawler\progress\latest</path>
-    </monitored-paths>
-    <job-actions>
-        <action>com.norconex.jefmon.instance.action.impl.ViewJobSuiteLogAction</action>
-        <action>com.norconex.jefmon.instance.action.impl.ViewJobLogAction</action>
-    </job-actions>
-</jefmon-config>
+<?xml version="1.0" ?><jefmon-config><instance-name>web-crawler</instance-name><default-refresh-interval>5</default-refresh-interval><remote-instances></remote-instances><monitored-paths><path>C:\Projects\data\crawler\progress\latest</path><path>C:\Projects\web-crawler-old\data\crawler\progress\latest</path></monitored-paths><job-actions><action>com.norconex.jefmon.instance.action.impl.ViewJobSuiteLogAction</action><action>com.norconex.jefmon.instance.action.impl.ViewJobLogAction</action></job-actions></jefmon-config>

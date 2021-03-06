@@ -1,0 +1,4 @@
+POST http://localhost:8081/crawler
+Content-Type: application/xml
+
+< ./crawler-config-vrtnws.xml
