@@ -23,5 +23,5 @@ To disable index replicas, you can add an index-template.
 
 This commands creates an index template and will apply these settings for indices starting with crawl*:
 ```aidl
-curl -XPUT "http://localhost:9200/_index_template/crawl-template" -H 'Content-Type: application/json' -d'{  "index_patterns": ["crawl*"],  "template": {    "settings": {      "number_of_shards": 1    },    "mappings": {      "properties": {        "crawl_date": {          "type": "date",          "format": "yyyyMMdd'\''T'\''HHmmss.SSSZ"        }      }    }  },  "priority": 200,  "version": 1,  "_meta": {    "description": "Default crawl index template"  }}'
+curl -XPUT "http://elasticsearch:9200/_data_stream/crawl-vrtnws-data-stream"
 ```
