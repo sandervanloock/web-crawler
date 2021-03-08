@@ -20,6 +20,7 @@ The result of the crawl can be found in Kibana on [http://localhost]()
 
 Elasticsearch runs as a single-node cluster in Docker.
 To disable index replicas, you can add an index-template.
+The default norconex Elasticsearch committer is updated so it supports datastreams.
 
 This commands creates an index template and will apply these settings for indices starting with crawl*:
 ```aidl
