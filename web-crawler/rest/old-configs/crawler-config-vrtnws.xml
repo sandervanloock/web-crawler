@@ -74,7 +74,7 @@
                         <dom selector="h1.vrt-title" toField="title" extract="text"/>
                     </tagger>
                     <tagger class="com.norconex.importer.handler.tagger.impl.CurrentDateTagger"
-                            field="crawl_date" overwrite="true" format="yyyyMMdd'T'HHmmss.SSSZ" />
+                            field="crawl_date_string" overwrite="true" format="yyyyMMdd'T'HHmmss.SSSZ" />
                 </preParseHandlers>
                 <postParseHandlers>
                     <tagger class="com.norconex.importer.handler.tagger.impl.DeleteTagger">

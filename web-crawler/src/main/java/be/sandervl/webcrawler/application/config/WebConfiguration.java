@@ -1,5 +1,8 @@
 package be.sandervl.webcrawler.application.config;
 
+import com.norconex.collector.http.fetch.IHttpFetcher;
+import com.norconex.collector.http.fetch.impl.GenericHttpFetcher;
+import com.norconex.collector.http.fetch.impl.GenericHttpFetcherConfig;
 import org.apache.http.client.HttpClient;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -23,35 +26,10 @@ import java.security.NoSuchAlgorithmException;
 public class WebConfiguration {
 
     @Bean
-    @Scope("prototype")
-    public HttpClient httpClient() {
-        final SSLConnectionSocketFactory sslsf;
-        try {
-            SSLContextBuilder builder = new SSLContextBuilder();
-            builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-            sslsf = new SSLConnectionSocketFactory(builder.build(),
-                    NoopHostnameVerifier.INSTANCE);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } catch (KeyStoreException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        final Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
-                .register("http", new PlainConnectionSocketFactory())
-                .register("https", sslsf)
-                .build();
-
-        PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(registry);
-        cm.setMaxTotal(100);
-        return HttpClients.custom()
-                .setSSLSocketFactory(sslsf)
-                .setConnectionManager(cm)
-                .setHostnameVerifier(SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER)
-                .build();
+    public IHttpFetcher httpFetcher(){
+        GenericHttpFetcherConfig config = new GenericHttpFetcherConfig();
+        config.setTrustAllSSLCertificates(true);
+        GenericHttpFetcher genericHttpFetcher = new GenericHttpFetcher(config);
+        return genericHttpFetcher;
     }
 }

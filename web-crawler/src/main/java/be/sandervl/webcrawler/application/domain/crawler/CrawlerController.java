@@ -28,7 +28,7 @@ public class CrawlerController {
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE)
     public String start(@RequestBody String config) throws IOException {
         HttpCollector httpCollector = httpCollectorFactory.createFromConfigString(config);
-        CompletableFuture.runAsync(() -> httpCollector.start(true));
+        CompletableFuture.runAsync(httpCollector::start);
         return httpCollector.getId();
     }
 }

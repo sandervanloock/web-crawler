@@ -33,6 +33,8 @@ public class Controller {
         @Id
         String id;
         String title;
+        @Field("crawl_date")
+        String crawlDate;
 
         public Document() {
         }
@@ -51,6 +53,14 @@ public class Controller {
 
         public void setTitle(String title) {
             this.title = title;
+        }
+
+        public String getCrawlDate() {
+            return crawlDate;
+        }
+
+        public void setCrawlDate(String crawlDate) {
+            this.crawlDate = crawlDate;
         }
     }
 }
