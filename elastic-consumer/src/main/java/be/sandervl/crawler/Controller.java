@@ -27,14 +27,16 @@ public class Controller {
         return Flux.fromStream(person.get().map(SearchHit::getContent));
     }
 
-    @org.springframework.data.elasticsearch.annotations.Document(indexName = "vrtnws-site")
+    @org.springframework.data.elasticsearch.annotations.Document(indexName = "crawl-vrtnws-data-stream")
     public class Document {
 
         @Id
         String id;
         String title;
-        @Field("crawl_date")
+        @Field("@timestamp")
         String crawlDate;
+        @Field("body")
+        String body;
 
         public Document() {
         }
@@ -61,6 +63,14 @@ public class Controller {
 
         public void setCrawlDate(String crawlDate) {
             this.crawlDate = crawlDate;
+        }
+
+        public String getBody() {
+            return body;
+        }
+
+        public void setBody(String body) {
+            this.body = body;
         }
     }
 }
