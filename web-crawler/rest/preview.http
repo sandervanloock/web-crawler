@@ -1,0 +1,4 @@
+POST http://localhost:8081/preview?url=https%3A%2F%2Fwww.vrt.be%2Fvrtnws%2Fnl%2F2022%2F01%2F21%2Fmeat-loaf-overleden%2F
+Content-Type: application/xml
+
+< ./crawler-config-vrtnws.xml

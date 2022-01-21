@@ -36,11 +36,16 @@ public class HttpCollectorFactory {
         return new HttpCollector(config);
     }
 
-    private HttpCollectorConfig createFromString(String input) throws IOException {
+    public static HttpCollectorConfig stringToConfig(String input) throws IOException {
         File configXml = File.createTempFile(RandomStringUtils.randomAlphanumeric(10), "xml");
         IOUtils.copy(new ByteArrayInputStream(input.getBytes()), new FileOutputStream(configXml));
         HttpCollectorConfig httpCollectorConfig = new HttpCollectorConfig();
         httpCollectorConfig.loadFromXML(XML.of(configXml).create());
+        return httpCollectorConfig;
+    }
+
+    private HttpCollectorConfig createFromString(String input) throws IOException {
+        HttpCollectorConfig httpCollectorConfig = stringToConfig(input);
         httpCollectorConfig.setWorkDir(Paths.get("./data"));
         httpCollectorConfig.getCrawlerConfigs().forEach(this::setDefaultCrawlerConfigs);
         return httpCollectorConfig;
@@ -50,7 +55,7 @@ public class HttpCollectorFactory {
         if (config instanceof HttpCrawlerConfig) {
             HttpCrawlerConfig crawlerConfig = (HttpCrawlerConfig) config;
             String configId = config.getId();
-            crawlerConfig.setId(configId+ LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+            crawlerConfig.setId(configId + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
             crawlerConfig.setHttpFetchers(beanFactory.getBean(IHttpFetcher.class));
 
             ElasticsearchCommitter committer = beanFactory.getBean(ElasticsearchCommitter.class);
