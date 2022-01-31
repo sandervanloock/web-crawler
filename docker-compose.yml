@@ -32,3 +32,12 @@ services:
     environment:
       - ROOT_DIR=/home
     command: java -Dlog4j.configuration="file:///home/classes/log4j.properties" -Dfile.encoding=UTF8 -cp "./lib/*:./classes" com.norconex.jefmon.server.JEFMonServer
+  database:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+    volumes:
+      - "./data/docker/mysql:/var/lib/mysql"
+      - "./docker/db/config:/etc/mysql/conf.d"
