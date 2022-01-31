@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "crawl_fields",
+  "info": {
+    "singularName": "crawl-field",
+    "pluralName": "crawl-fields",
+    "displayName": "CrawlField",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "selector": {
+      "type": "string"
+    },
+    "site": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::site.site"
+    },
+    "extract": {
+      "type": "string"
+    }
+  }
+}
