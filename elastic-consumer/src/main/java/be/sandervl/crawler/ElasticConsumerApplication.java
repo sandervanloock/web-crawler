@@ -16,14 +16,12 @@ public class ElasticConsumerApplication {
 	}
 
 	@Bean
-	ReactiveElasticsearchClient client() {
-
+	public ReactiveElasticsearchClient client() {
 		ClientConfiguration clientConfiguration = ClientConfiguration.builder()
 				.connectedTo("localhost:9200", "localhost:9291")
 				.withWebClientConfigurer(webClient -> {
 					ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-							.codecs(configurer -> configurer.defaultCodecs()
-									.maxInMemorySize(-1))
+							.codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(-1))
 							.build();
 					return webClient.mutate().exchangeStrategies(exchangeStrategies).build();
 				})
