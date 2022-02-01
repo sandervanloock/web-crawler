@@ -14,6 +14,7 @@ import { AbbreviatePipe } from './pipes/abbreviate.pipe';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { CrawlPreviewComponent } from './components/crawl-preview/crawl-preview.component';
 import { MatInputModule } from "@angular/material/input";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { MatInputModule } from "@angular/material/input";
     HttpClientModule,
     FlexLayoutModule,
     MatInputModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

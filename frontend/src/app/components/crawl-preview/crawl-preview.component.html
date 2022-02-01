@@ -1,14 +1,21 @@
-<div fxLayout="">
-  <form fxFlex="50%">
-    <mat-form-field appearance="fill">
-      <mat-label>Url</mat-label>
-      <input matInput placeholder="Preview URI" type="url">
-    </mat-form-field>
+<div class="content">
+  <form fxFlex="50%" fxLayout="row">
 
-    <mat-form-field appearance="fill">
-      <mat-label>Config</mat-label>
-      <textarea matInput placeholder="XML CONFIG" rows="30"></textarea>
-    </mat-form-field>
+    <div fxFlex="70%">
+      <mat-form-field appearance="fill">
+        <mat-label>Url</mat-label>
+        <input matInput placeholder="Preview URI" type="url">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Config</mat-label>
+        <textarea cdkTextareaAutosize matInput placeholder="Paste your XML Config here.."></textarea>
+      </mat-form-field>
+    </div>
+    <div fxFlex="30%">
+      <button color="accent" fxFlexAlign="end" mat-raised-button>Preview</button>
+    </div>
+
   </form>
 
   <div fxFlex="50%">

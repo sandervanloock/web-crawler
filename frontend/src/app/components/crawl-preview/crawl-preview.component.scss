@@ -1,0 +1,20 @@
+.content {
+  margin: auto 16px;
+  color: white;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+form mat-form-field {
+  width: 90%
+}
+
+form button {
+  align-content: end;
+  text-align: end;
+}
