@@ -15,6 +15,7 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { CrawlPreviewComponent } from './components/crawl-preview/crawl-preview.component';
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MatButtonModule } from "@angular/material/button";
     FlexLayoutModule,
     MatInputModule,
     MatButtonModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

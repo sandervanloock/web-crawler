@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./crawl-preview.component.scss']
 })
 export class CrawlPreviewComponent implements OnInit {
+  url: string = "";
+  config: string = "";
 
   constructor() {
   }
@@ -13,4 +15,8 @@ export class CrawlPreviewComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  preview($event: MouseEvent) {
+    $event.preventDefault();
+    console.log("preview crawl")
+  }
 }

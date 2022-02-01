@@ -1,24 +1,27 @@
 <div class="content">
-  <form fxFlex="50%" fxLayout="row">
+  <form #inputForm="ngForm" fxFlex="50%" fxLayout="row">
 
     <div fxFlex="70%">
       <mat-form-field appearance="fill">
         <mat-label>Url</mat-label>
-        <input matInput placeholder="Preview URI" type="url">
+        <input [(ngModel)]="url" matInput name="url" placeholder="Preview URI" required type="url">
       </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label>Config</mat-label>
-        <textarea cdkTextareaAutosize matInput placeholder="Paste your XML Config here.."></textarea>
+        <textarea [(ngModel)]="config" cdkTextareaAutosize matInput name="config"
+                  placeholder="Paste your XML Config here.." required></textarea>
       </mat-form-field>
     </div>
     <div fxFlex="30%">
-      <button color="accent" fxFlexAlign="end" mat-raised-button>Preview</button>
+      <button (click)="preview($event)" [disabled]="inputForm.invalid" color="accent" fxFlexAlign="end"
+              mat-raised-button type="submit">Preview
+      </button>
     </div>
 
   </form>
 
   <div fxFlex="50%">
-    <code>output</code>
+    <code id="preview"></code>
   </div>
 </div>
