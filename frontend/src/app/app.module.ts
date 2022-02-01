@@ -12,13 +12,16 @@ import { CrawlerDataGridComponent } from './components/crawler-data-grid/crawler
 import { MatCardModule } from "@angular/material/card";
 import { AbbreviatePipe } from './pipes/abbreviate.pipe';
 import { FlexLayoutModule } from "@angular/flex-layout";
+import { CrawlPreviewComponent } from './components/crawl-preview/crawl-preview.component';
+import { MatInputModule } from "@angular/material/input";
 
 @NgModule({
   declarations: [
     AppComponent,
     SiteSelectorComponent,
     CrawlerDataGridComponent,
-    AbbreviatePipe
+    AbbreviatePipe,
+    CrawlPreviewComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +31,8 @@ import { FlexLayoutModule } from "@angular/flex-layout";
     MatSelectModule,
     MatCardModule,
     HttpClientModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
