@@ -1,3 +1,20 @@
-.example-card {
-  max-width: 400px;
+a,
+a:visited,
+a:hover {
+  color: white;
+  text-decoration: none;
+}
+
+.content {
+  padding: 16px;
+}
+
+.content > mat-card {
+  width: 200px;
+}
+
+.card-wrapper {
+  margin-bottom: 16px;
+  height: 300px;
+  overflow: hidden;
 }

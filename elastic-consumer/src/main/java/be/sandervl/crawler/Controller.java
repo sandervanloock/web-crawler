@@ -1,6 +1,7 @@
 package be.sandervl.crawler;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -31,8 +32,9 @@ public class Controller {
         String site = "vrtnws"; //TODO get site name from CMS
 
         CriteriaQuery query = new CriteriaQuery(Criteria.and());
-        query.addFields("url", "title", "img", "@timestamp"); //TODO get fields from CMS
+        query.addFields("vrtnws_url", "vrtnws_title", "vrtnws_img", "vrtnws_authors", "vrtnws_body", "@timestamp"); //TODO get fields from CMS
         query.setPageable(page);
+        query.addSort(Sort.by(Sort.Direction.DESC, "@timestamp"));
         SearchHits<Map> result = elasticsearchOperations.search(query, Map.class, IndexCoordinates.of("crawl-" + site + "-data-stream"));
 
         return Flux.fromStream(result.stream().map(SearchHit::getContent));

@@ -10,12 +10,15 @@ import { HttpClientModule } from "@angular/common/http";
 import { SiteSelectorComponent } from "./components/site-selector/site-selector.component";
 import { CrawlerDataGridComponent } from './components/crawler-data-grid/crawler-data-grid.component';
 import { MatCardModule } from "@angular/material/card";
+import { AbbreviatePipe } from './pipes/abbreviate.pipe';
+import { FlexLayoutModule } from "@angular/flex-layout";
 
 @NgModule({
   declarations: [
     AppComponent,
     SiteSelectorComponent,
-    CrawlerDataGridComponent
+    CrawlerDataGridComponent,
+    AbbreviatePipe
   ],
   imports: [
     BrowserModule,
@@ -24,7 +27,8 @@ import { MatCardModule } from "@angular/material/card";
     MatToolbarModule,
     MatSelectModule,
     MatCardModule,
-    HttpClientModule
+    HttpClientModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

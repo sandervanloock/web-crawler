@@ -136,7 +136,7 @@ Manual:       https://opensource.norconex.com/docs/collectors/http/
             <dom matchBlanks="true" toField="vrtnws.body" selector=".article__body" extract="text"/>
           </handler>
           <handler class="CurrentDateTagger"
-                   toField="vrtnws.@timestamp"
+                   toField="@timestamp"
                    format="yyyy-MM-dd'T'HH:mm:ss.SSSZ"/>
         </preParseHandlers>
         <!--
@@ -145,11 +145,11 @@ Manual:       https://opensource.norconex.com/docs/collectors/http/
           (e.g., HTML tags) and you should no longer encounter binary content.
           -->
         <postParseHandlers>
-          <handler class="DeleteTagger">
-            <fieldMatcher method="regex">
-              ^(?!vrtnws).+$
-            </fieldMatcher>
-          </handler>
+          <!--          <handler class="DeleteTagger">-->
+          <!--            <fieldMatcher method="regex">-->
+          <!--              ^(?!vrtnws).+$ make sure @timestamp is kept as field, it is required-->
+          <!--            </fieldMatcher>-->
+          <!--          </handler>-->
         </postParseHandlers>
       </importer>
 
