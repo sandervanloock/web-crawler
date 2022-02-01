@@ -8,11 +8,14 @@ import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatSelectModule } from "@angular/material/select";
 import { HttpClientModule } from "@angular/common/http";
 import { SiteSelectorComponent } from "./components/site-selector/site-selector.component";
+import { CrawlerDataGridComponent } from './components/crawler-data-grid/crawler-data-grid.component';
+import { MatCardModule } from "@angular/material/card";
 
 @NgModule({
   declarations: [
     AppComponent,
-    SiteSelectorComponent
+    SiteSelectorComponent,
+    CrawlerDataGridComponent
   ],
   imports: [
     BrowserModule,
@@ -20,6 +23,7 @@ import { SiteSelectorComponent } from "./components/site-selector/site-selector.
     BrowserAnimationsModule,
     MatToolbarModule,
     MatSelectModule,
+    MatCardModule,
     HttpClientModule
   ],
   providers: [],

@@ -1,0 +1,12 @@
+<mat-card *ngFor="let item of data" class="example-card">
+  <mat-card-header>
+    <div mat-card-avatar></div>
+    <mat-card-title>{{item.title}}</mat-card-title>
+  </mat-card-header>
+  <img [src]="item.img" alt="" mat-card-image>
+  <mat-card-content>
+    <p>
+      {{item.description}}
+    </p>
+  </mat-card-content>
+</mat-card>

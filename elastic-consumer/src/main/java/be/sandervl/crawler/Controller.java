@@ -7,6 +7,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin(origins = "*")
 public class Controller {
     private ElasticsearchOperations elasticsearchOperations;
 
@@ -29,7 +31,7 @@ public class Controller {
         String site = "vrtnws"; //TODO get site name from CMS
 
         CriteriaQuery query = new CriteriaQuery(Criteria.and());
-        query.addFields("url", "title", "@timestamp"); //TODO get fields from CMS
+        query.addFields("url", "title", "img", "@timestamp"); //TODO get fields from CMS
         query.setPageable(page);
         SearchHits<Map> result = elasticsearchOperations.search(query, Map.class, IndexCoordinates.of("crawl-" + site + "-data-stream"));
 
