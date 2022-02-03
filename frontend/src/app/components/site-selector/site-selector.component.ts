@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Site, SiteService } from "../../services/site.service";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
@@ -12,6 +12,9 @@ export class SiteSelectorComponent implements OnInit {
 
   $sites = new Observable<Site[]>();
 
+  @Output()
+  changeSiteEmitter = new EventEmitter<Site>()
+
   constructor(private siteService: SiteService) {
   }
 
@@ -21,5 +24,4 @@ export class SiteSelectorComponent implements OnInit {
       return site;
     })));
   }
-
 }

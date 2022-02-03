@@ -18,6 +18,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { FormsModule } from "@angular/forms";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { XmlPipe } from './pipes/xml.pipe';
+import { MatMenuModule } from "@angular/material/menu";
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { XmlPipe } from './pipes/xml.pipe';
     MatButtonModule,
     FormsModule,
     MatProgressSpinnerModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

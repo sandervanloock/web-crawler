@@ -22,7 +22,7 @@ export interface StrapObjectWrapper<T> {
 }
 
 export interface Site {
-  id?: number;
+  id: number;
   name: string;
 }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CrawlDataService } from "../../services/crawl-data.service";
+import { SiteStoreService } from "../../services/site-store.service";
 
 @Component({
   selector: 'app-crawler-data-grid',
@@ -11,11 +12,18 @@ export class CrawlerDataGridComponent implements OnInit {
   data: any[] = [];
   site = "vrtnu";
 
-  constructor(private crawlDataService: CrawlDataService) {
+  constructor(private crawlDataService: CrawlDataService, private siteStore: SiteStoreService) {
   }
 
   ngOnInit(): void {
-    this.crawlDataService.search().subscribe(res => this.data = res);
+    this.search();
+    this.siteStore.site$.subscribe(site => {
+      this.site = site.name;
+      this.search();
+    });
   }
 
+  private search() {
+    this.crawlDataService.search(this.site).subscribe(res => this.data = res);
+  }
 }

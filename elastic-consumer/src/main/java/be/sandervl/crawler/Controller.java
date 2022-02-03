@@ -8,10 +8,7 @@ import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.Criteria;
 import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.Map;
@@ -27,9 +24,9 @@ public class Controller {
     }
 
     @GetMapping("/data")
-    public Flux<Object> search(Pageable page) {
+    public Flux<Object> search(@RequestParam("site") String site, Pageable page) {
 
-        String site = "vrtnu"; //TODO get site name from CMS
+//        String site = "vrtnu"; //TODO get site name from CMS
 
         CriteriaQuery query = new CriteriaQuery(Criteria.and());
         query.addFields(site + "_url", site + "_title", site + "_img", site + "_authors", site + "_body", "@timestamp"); //TODO get fields from CMS

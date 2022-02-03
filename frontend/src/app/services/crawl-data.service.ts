@@ -10,8 +10,8 @@ export class CrawlDataService {
   constructor(private http: HttpClient) {
   }
 
-  search(): Observable<any> {
-    return this.http.get("http://localhost:8082/data");
+  search(site: string): Observable<any> {
+    return this.http.get("http://localhost:8082/data", { params: new HttpParams({ fromObject: { site } }) });
   }
 
   preview(url: string, config: string): Observable<any> {
