@@ -29,10 +29,10 @@ public class Controller {
     @GetMapping("/data")
     public Flux<Object> search(Pageable page) {
 
-        String site = "vrtnws"; //TODO get site name from CMS
+        String site = "vrtnu"; //TODO get site name from CMS
 
         CriteriaQuery query = new CriteriaQuery(Criteria.and());
-        query.addFields("vrtnws_url", "vrtnws_title", "vrtnws_img", "vrtnws_authors", "vrtnws_body", "@timestamp"); //TODO get fields from CMS
+        query.addFields(site + "_url", site + "_title", site + "_img", site + "_authors", site + "_body", "@timestamp"); //TODO get fields from CMS
         query.setPageable(page);
         query.addSort(Sort.by(Sort.Direction.DESC, "@timestamp"));
         SearchHits<Map> result = elasticsearchOperations.search(query, Map.class, IndexCoordinates.of("crawl-" + site + "-data-stream"));

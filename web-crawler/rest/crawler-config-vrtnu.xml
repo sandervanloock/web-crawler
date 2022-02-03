@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<httpcollector id="config-id">
+    <workDir>./data/work</workDir>
+    <crawlers>
+        <crawler id="vrtnu">
+            <startURLs stayOnDomain="true" stayOnPort="true" stayOnProtocol="true">
+                <url>https://www.vrt.be/vrtnu/a-z/</url>
+            </startURLs>
+            <urlNormalizer class="GenericURLNormalizer">
+                <normalizations>
+                    removeFragment, lowerCaseSchemeHost, upperCaseEscapeSequence,
+                    decodeUnreservedCharacters, removeDefaultPort,
+                    encodeNonURICharacters
+                </normalizations>
+            </urlNormalizer>
+            <delay default="3000"/>
+            <numThreads>2</numThreads>
+            <maxDepth>1</maxDepth>
+            <maxDocuments>100</maxDocuments>
+            <orphansStrategy>PROCESS</orphansStrategy>
+            <robotsTxt ignore="false"/>
+            <sitemapResolver ignore="true"/>
+            <canonicalLinkDetector ignore="false"/>
+            <linkExtractors>
+                <extractor class="GenericLinkExtractor">
+                    <tags>
+                        <tag name="a" attribute="href"/>
+                    </tags>
+                    <extractSelector>
+                        nui-tile
+                    </extractSelector>
+                </extractor>
+            </linkExtractors>
+            <metadataFilters>
+                <filter class="RegexReferenceFilter" onMatch="include">
+                    http(s):\/\/www\.vrt\.be\/vrtnu\/a-z/.*\/
+                </filter>
+            </metadataFilters>
+            <importer>
+                <preParseHandlers>
+                    <handler class="DOMTagger">
+                        <dom matchBlanks="true" toField="vrtnu.url" selector="meta[property=og:url]"
+                             extract="attr(content)"/>
+                        <dom matchBlanks="true" toField="vrtnu.img" selector="meta[property=og:image]"
+                             extract="attr(content)"/>
+                        <dom matchBlanks="true" toField="vrtnu.title" selector="meta[property=og:title]"
+                             extract="attr(content)"/>
+                        <dom matchBlanks="true" toField="vrtnu.body" selector="meta[property=og:description]"
+                             extract="attr(content)"/>
+                    </handler>
+                    <handler class="CurrentDateTagger"
+                             toField="@timestamp"
+                             format="yyyy-MM-dd'T'HH:mm:ss.SSSZ"/>
+                </preParseHandlers>
+                <postParseHandlers>
+                    <handler class="DeleteTagger">
+                        <fieldMatcher method="regex">
+                            (^(?!vrtnu|@timestamp).+$)
+                        </fieldMatcher>
+                    </handler>
+                </postParseHandlers>
+            </importer>
+            <committers>
+                <committer class="ElasticsearchCommitter">
+                    <nodes>http://localhost:9200</nodes>
+                    <indexName>crawl-vrtnu-data-stream</indexName>
+                </committer>
+            </committers>
+        </crawler>
+    </crawlers>
+</httpcollector>

@@ -9,6 +9,7 @@ import { CrawlDataService } from "../../services/crawl-data.service";
 export class CrawlerDataGridComponent implements OnInit {
 
   data: any[] = [];
+  site = "vrtnu";
 
   constructor(private crawlDataService: CrawlDataService) {
   }
