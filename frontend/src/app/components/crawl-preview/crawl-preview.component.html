@@ -1,7 +1,7 @@
 <div class="content">
   <form #inputForm="ngForm" fxFlex="50%" fxLayout="row">
 
-    <div fxFlex="70%">
+    <div fxFlex="85%">
       <mat-form-field appearance="fill">
         <mat-label>Url</mat-label>
         <input [(ngModel)]="url" matInput name="url" placeholder="Preview URI" required type="url">
@@ -9,12 +9,13 @@
 
       <mat-form-field appearance="fill">
         <mat-label>Config</mat-label>
-        <textarea [(ngModel)]="config" cdkTextareaAutosize matInput name="config"
-                  placeholder="Paste your XML Config here.." required></textarea>
+        <textarea (change)="preventScroll($event)" [(ngModel)]="config" matInput
+                  name="config" placeholder="Paste your XML Config here.." required
+                  rows="30"></textarea>
       </mat-form-field>
     </div>
-    <div fxFlex="30%">
-      <button (click)="preview($event)" [disabled]="inputForm.invalid" color="accent" fxFlexAlign="end"
+    <div fxFlex="15%">
+      <button (click)="preview($event)" [disabled]="inputForm.invalid" color="accent"
               mat-raised-button type="submit">Preview
       </button>
     </div>
@@ -22,6 +23,7 @@
   </form>
 
   <div fxFlex="50%">
-    <code id="preview"></code>
+    <mat-spinner *ngIf="loading"></mat-spinner>
+    <pre *ngIf="!loading">{{previewData | json}}</pre>
   </div>
 </div>

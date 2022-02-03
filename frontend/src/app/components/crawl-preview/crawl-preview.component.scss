@@ -9,12 +9,19 @@ form {
   align-items: flex-start;
 }
 
-
 form mat-form-field {
-  width: 90%
+  width: 95%
 }
 
-form button {
-  align-content: end;
-  text-align: end;
+mat-spinner {
+  margin: 30px auto;
+}
+
+pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
 }

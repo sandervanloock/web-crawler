@@ -16,6 +16,8 @@ import { CrawlPreviewComponent } from './components/crawl-preview/crawl-preview.
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { FormsModule } from "@angular/forms";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { XmlPipe } from './pipes/xml.pipe';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { FormsModule } from "@angular/forms";
     SiteSelectorComponent,
     CrawlerDataGridComponent,
     AbbreviatePipe,
-    CrawlPreviewComponent
+    CrawlPreviewComponent,
+    XmlPipe
   ],
   imports: [
     BrowserModule,
@@ -37,6 +40,7 @@ import { FormsModule } from "@angular/forms";
     MatInputModule,
     MatButtonModule,
     FormsModule,
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
