@@ -18,13 +18,14 @@
     "selector": {
       "type": "string"
     },
-    "site": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::site.site"
-    },
     "extract": {
       "type": "string"
+    },
+    "site": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::site.site",
+      "inversedBy": "crawlFields"
     }
   }
 }

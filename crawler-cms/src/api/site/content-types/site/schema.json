@@ -4,7 +4,8 @@
   "info": {
     "singularName": "site",
     "pluralName": "sites",
-    "displayName": "Site"
+    "displayName": "Site",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -16,6 +17,12 @@
     },
     "crawlconfig": {
       "type": "text"
+    },
+    "crawlFields": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::crawl-field.crawl-field",
+      "mappedBy": "site"
     }
   }
 }
