@@ -12,24 +12,24 @@ import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
-import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/")
 @CrossOrigin(origins = "*")
-public class Controller {
+public class DataController {
     private ElasticsearchOperations elasticsearchOperations;
     private SiteService siteService;
 
-    public Controller(ElasticsearchOperations elasticsearchOperations, SiteService siteService) {
+    public DataController(ElasticsearchOperations elasticsearchOperations, SiteService siteService) {
         this.elasticsearchOperations = elasticsearchOperations;
         this.siteService = siteService;
     }
 
     @GetMapping("/data")
-    public Flux<Map> search(@RequestParam("siteId") Long siteId, Pageable page) {
+    public Flux<DataResult> search(@RequestParam("siteId") Long siteId, Pageable page) {
         return siteService.getSite(siteId).map(site -> {
             String siteName = site.getData().getAttributes().getName();
             CriteriaQuery query = new CriteriaQuery(Criteria.and());
@@ -44,10 +44,14 @@ public class Controller {
             query.addFields(fields.toArray(new String[0]));
             query.setPageable(page);
             query.addSort(Sort.by(Sort.Direction.DESC, "@timestamp"));
-            SearchHits<Map> result = elasticsearchOperations.search(query, Map.class, IndexCoordinates.of("crawl-" + siteName + "-data-stream"));
-            Stream<Map> contentStream = result.stream().map(SearchHit::getContent);
+            SearchHits<DataResult> result = elasticsearchOperations.search(query, DataResult.class, IndexCoordinates.of("crawl-" + siteName + "-data-stream"));
+            Stream<DataResult> contentStream = result.stream().map(SearchHit::getContent);
             return Flux.fromStream(contentStream);
         }).orElse(Flux.empty());
+
+    }
+
+    static class DataResult extends HashMap<String, String> {
 
     }
 }
