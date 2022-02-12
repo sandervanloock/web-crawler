@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CrawlDataService } from "../../services/crawl-data.service";
 import { XmlPipe } from "../../pipes/xml.pipe";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-crawl-preview',
   templateUrl: './crawl-preview.component.html',
   styleUrls: ['./crawl-preview.component.scss']
 })
-export class CrawlPreviewComponent {
+export class CrawlPreviewComponent implements OnDestroy {
   url: string = "";
   config: string = "";
   previewData: string | undefined = JSON.parse(`{
@@ -29,6 +30,7 @@ export class CrawlPreviewComponent {
 }`);
   loading = false;
 
+  private subscription?: Subscription;
 
   constructor(private crawlService: CrawlDataService) {
   }
@@ -37,16 +39,20 @@ export class CrawlPreviewComponent {
     $event.preventDefault();
     if (this.url.length && this.config.length) {
       this.loading = true
-      this.crawlService.preview(this.url, this.config)
+      this.subscription = this.crawlService.preview(this.url, this.config)
         .subscribe(res => {
           this.loading = false;
           this.previewData = res;
-        })
+        });
     }
   }
 
   preventScroll($event: any) {
     $event.preventDefault();
     this.config = new XmlPipe().transform($event.target.value)
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

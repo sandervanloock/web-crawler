@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from "rxjs";
+import { BehaviorSubject, Subject } from "rxjs";
 import { ISite } from "../models";
 
 @Injectable({
@@ -17,5 +17,9 @@ export class SiteStoreService {
 
   selectSite(site: ISite) {
     this.site.next(site);
+  }
+
+  select(site: ISite) {
+    this.site = new BehaviorSubject(site);
   }
 }

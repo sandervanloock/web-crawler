@@ -1,19 +1,20 @@
 <!--https://zoaibkhan.com/blog/create-a-responsive-card-grid-in-angular-using-flex-layout-part-1/-->
-<div class="content">
-  <div fxLayout="row wrap" fxLayoutGap="16px">
-    <div *ngFor="let item of data" class="card-wrapper" fxFlex="23%" fxFlex.sm="32%" fxFlex.xs="100%">
-      <mat-card>
-        <a [href]="item[site+'_url']" target="_blank">
-          <mat-card-header>
-            <mat-card-title>{{item[site + '_title']}}</mat-card-title>
-            <mat-card-subtitle>{{item['@timestamp'] | date}}</mat-card-subtitle>
-            <mat-card-subtitle *ngIf="item[site+'_authors']">- {{item[site + '_authors']}}</mat-card-subtitle>
-          </mat-card-header>
-          <img [src]="item[site+'_img']" alt="" mat-card-image>
-          <mat-card-content>
-            <p>
-              <!--              {{item['vrtnws_body'] | abbreviate:[150, '...']}}-->
-            </p>
+<div *ngIf="site" class="content">
+    <div fxLayout="row wrap" fxLayoutGap="16px">
+        <div *ngFor="let item of data" class="card-wrapper" fxFlex="23%" fxFlex.sm="32%" fxFlex.xs="100%">
+            <mat-card>
+                <a [href]="item[site.name+'_url']" target="_blank">
+                    <mat-card-header>
+                        <mat-card-title>{{item[site.name + '_title']}}</mat-card-title>
+                        <mat-card-subtitle>{{item['@timestamp'] | date}}</mat-card-subtitle>
+                        <mat-card-subtitle *ngIf="item[site.name+'_authors']">
+                            - {{item[site.name + '_authors']}}</mat-card-subtitle>
+                    </mat-card-header>
+                    <img [src]="item[site.name+'_img']" alt="" mat-card-image>
+                    <mat-card-content>
+                        <p>
+                            <!--              {{item['vrtnws_body'] | abbreviate:[150, '...']}}-->
+                        </p>
           </mat-card-content>
         </a>
       </mat-card>

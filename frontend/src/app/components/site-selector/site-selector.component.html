@@ -1,9 +1,9 @@
 <div *ngIf="$sites | async as sites" class="selector">
-  <button [matMenuTriggerFor]="menu" mat-button>
-    Site
-  </button>
+  <a [matMenuTriggerFor]="menu" href="#">
+    {{this.selection ? this.selection.name : 'Select Site ...'}}
+  </a>
   <mat-menu #menu="matMenu">
-    <button (click)="changeSiteEmitter.emit(site)" *ngFor="let site of sites" mat-menu-item>{{site.name}}</button>
+    <button (click)="select(site)" *ngFor="let site of sites" mat-menu-item>{{site.name}}</button>
   </mat-menu>
 </div>
 
