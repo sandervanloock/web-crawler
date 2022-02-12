@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject } from "rxjs";
-import { Site } from "./site.service";
+import { ISite } from "../models";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteStoreService {
-  private site: Subject<Site> = new Subject<Site>();
+  private site: Subject<ISite> = new Subject<ISite>();
 
   constructor() {
   }
@@ -15,7 +15,7 @@ export class SiteStoreService {
     return this.site.asObservable();
   }
 
-  selectSite(site: Site) {
+  selectSite(site: ISite) {
     this.site.next(site);
   }
 }

@@ -1,7 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Site, SiteService } from "../../services/site.service";
+import { SiteService } from "../../services/site.service";
 import { map } from "rxjs/operators";
 import { Observable } from "rxjs";
+import { ISite } from "../../models";
 
 @Component({
   selector: 'app-site-selector',
@@ -10,17 +11,17 @@ import { Observable } from "rxjs";
 })
 export class SiteSelectorComponent implements OnInit {
 
-  $sites = new Observable<Site[]>();
+  $sites = new Observable<ISite[]>();
 
   @Output()
-  changeSiteEmitter = new EventEmitter<Site>()
+  changeSiteEmitter = new EventEmitter<ISite>()
 
   constructor(private siteService: SiteService) {
   }
 
   ngOnInit(): void {
     this.$sites = this.siteService.getSites().pipe(map(res => res.data.map(it => {
-      const site: Site = { id: it.id, name: it.attributes.name }
+      const site: ISite = { id: `${it.id}`, name: it.attributes.name }
       return site;
     })));
   }

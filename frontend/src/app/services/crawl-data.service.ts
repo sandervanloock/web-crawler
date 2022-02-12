@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { Site } from "./site.service";
+import { ISite } from "../models";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class CrawlDataService {
   constructor(private http: HttpClient) {
   }
 
-  search(site: Site): Observable<any> {
+  search(site: ISite): Observable<any> {
     return this.http.get("http://localhost:8082/data", { params: new HttpParams({ fromObject: { siteId: site.id } }) });
   }
 

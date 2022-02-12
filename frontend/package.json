@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "strapi:models": "sts ../crawler-cms/src/api -g ../crawler-cms/src/api/ src/app/models/"
   },
   "private": true,
   "dependencies": {
