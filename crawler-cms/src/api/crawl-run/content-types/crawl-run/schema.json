@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "crawl_runs",
+  "info": {
+    "singularName": "crawl-run",
+    "pluralName": "crawl-runs",
+    "displayName": "Crawl Run"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "start": {
+      "type": "datetime"
+    },
+    "end": {
+      "type": "datetime"
+    },
+    "site": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::site.site"
+    },
+    "number_processed": {
+      "type": "integer"
+    },
+    "number_committed": {
+      "type": "integer"
+    }
+  }
+}

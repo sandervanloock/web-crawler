@@ -19,6 +19,10 @@ import { FormsModule } from "@angular/forms";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { XmlPipe } from './pipes/xml.pipe';
 import { MatMenuModule } from "@angular/material/menu";
+import { MatIconModule } from "@angular/material/icon";
+import { SiteActionsComponent } from './components/site-actions/site-actions.component';
+import { CdkTableModule } from "@angular/cdk/table";
+import { CrawlComponent } from './components/crawl/crawl.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +31,9 @@ import { MatMenuModule } from "@angular/material/menu";
     CrawlerDataGridComponent,
     AbbreviatePipe,
     CrawlPreviewComponent,
-    XmlPipe
+    XmlPipe,
+    SiteActionsComponent,
+    CrawlComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +49,8 @@ import { MatMenuModule } from "@angular/material/menu";
     FormsModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatIconModule,
+    CdkTableModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
