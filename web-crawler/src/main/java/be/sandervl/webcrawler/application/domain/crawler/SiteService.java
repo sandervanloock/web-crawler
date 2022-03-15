@@ -1,6 +1,13 @@
 package be.sandervl.webcrawler.application.domain.crawler;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.norconex.collector.core.crawler.CrawlerConfig;
+import com.norconex.collector.http.HttpCollectorConfig;
+import com.norconex.commons.lang.map.PropertySetter;
+import com.norconex.importer.ImporterConfig;
+import com.norconex.importer.handler.HandlerConsumer;
+import com.norconex.importer.handler.IImporterHandler;
+import com.norconex.importer.handler.tagger.impl.DOMTagger;
 import lombok.Data;
 import lombok.val;
 import org.springframework.core.ParameterizedTypeReference;
@@ -12,11 +19,15 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static be.sandervl.webcrawler.application.HttpCollectorFactory.stringToConfig;
 
 @Service
 public class SiteService {
@@ -40,6 +51,34 @@ public class SiteService {
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    public Optional<ImporterConfig> getImporterConfig(Long siteId) throws IOException {
+        var site = getSite(siteId).orElseThrow();
+        Site siteAttributes = site.getData().getAttributes();
+
+        List<IImporterHandler> handlers =
+                siteAttributes.getCrawlFields().getData().stream()
+                        .map(StrapiObjectWrapper::getAttributes)
+                        .map(this::createDomTagger)
+                        .collect(Collectors.toList());
+        HttpCollectorConfig config = stringToConfig(siteAttributes.getCrawlconfig());
+
+        return config.getCrawlerConfigs()
+                .stream()
+                .map(CrawlerConfig::getImporterConfig)
+                .peek(imp -> imp.setPreParseConsumer(HandlerConsumer.fromHandlers(handlers)))
+                .findAny();
+    }
+
+    private DOMTagger createDomTagger(SiteService.CrawlField crawlField) {
+        DOMTagger domTagger = new DOMTagger();
+        domTagger.addDOMExtractDetails(new DOMTagger.DOMExtractDetails(
+                crawlField.getSelector(),
+                crawlField.getName(),
+                PropertySetter.REPLACE,
+                crawlField.getExtract()));
+        return domTagger;
     }
 
     @Data
