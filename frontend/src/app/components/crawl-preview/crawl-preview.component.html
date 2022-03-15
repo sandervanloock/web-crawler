@@ -7,17 +7,17 @@
         <input [(ngModel)]="url" matInput name="url" placeholder="Preview URI" required type="url">
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <mat-label>Config</mat-label>
-        <textarea (change)="preventScroll($event)" [(ngModel)]="config" matInput
-                  name="config" placeholder="Paste your XML Config here.." required
-                  rows="30"></textarea>
-      </mat-form-field>
+        <!--      <mat-form-field appearance="fill">-->
+        <!--        <mat-label>Config</mat-label>-->
+        <!--        <textarea (change)="preventScroll($event)" [(ngModel)]="config" matInput-->
+        <!--                  name="config" placeholder="Paste your XML Config here.." required-->
+        <!--                  rows="30"></textarea>-->
+        <!--      </mat-form-field>-->
     </div>
     <div fxFlex="15%">
-      <button (click)="preview($event)" [disabled]="inputForm.invalid" color="accent"
-              mat-raised-button type="submit">Preview
-      </button>
+        <button (click)="preview($event)" [disabled]="inputForm.invalid || this.loading" color="accent"
+                mat-raised-button type="submit">Preview
+        </button>
     </div>
 
   </form>

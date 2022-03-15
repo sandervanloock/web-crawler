@@ -2,8 +2,12 @@ package be.sandervl.webcrawler.application.domain.crawler;
 
 import com.norconex.collector.core.crawler.CrawlerConfig;
 import com.norconex.collector.http.HttpCollectorConfig;
+import com.norconex.commons.lang.map.PropertySetter;
 import com.norconex.importer.Importer;
 import com.norconex.importer.ImporterRequest;
+import com.norconex.importer.handler.HandlerConsumer;
+import com.norconex.importer.handler.IImporterHandler;
+import com.norconex.importer.handler.tagger.impl.DOMTagger;
 import com.norconex.importer.response.ImporterResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -21,20 +25,40 @@ import static be.sandervl.webcrawler.application.HttpCollectorFactory.stringToCo
 
 
 @RestController
-@RequestMapping("/preview")
+@RequestMapping("/preview/{siteId}")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class ImportPreviewController {
 
+    private final SiteService siteService;
+
     @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<String>> start(@RequestBody String input, @QueryParam("url") String url) throws IOException {
-        HttpCollectorConfig config = stringToConfig(input);
+    public Map<String, List<String>> start(@PathVariable("siteId") Long siteId, @QueryParam("url") String url) throws IOException {
+        var site = siteService.getSite(siteId).orElseThrow();
+        SiteService.Site siteAttributes = site.getData().getAttributes();
+        List<IImporterHandler> handlers =
+                siteAttributes.getCrawlFields().getData().stream()
+                        .map(SiteService.StrapiObjectWrapper::getAttributes)
+                        .map(this::createDomTagger)
+                        .collect(Collectors.toList());
+        HttpCollectorConfig config = stringToConfig(siteAttributes.getCrawlconfig());
         return config.getCrawlerConfigs()
                 .stream()
                 .map(CrawlerConfig::getImporterConfig)
+                .peek(imp -> imp.setPreParseConsumer(HandlerConsumer.fromHandlers(handlers)))
                 .map(Importer::new)
                 .flatMap(importer -> getMetadataFromUrl(url, importer))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private DOMTagger createDomTagger(SiteService.CrawlField crawlField) {
+        DOMTagger domTagger = new DOMTagger();
+        domTagger.addDOMExtractDetails(new DOMTagger.DOMExtractDetails(
+                crawlField.getSelector(),
+                crawlField.getName(),
+                PropertySetter.REPLACE,
+                crawlField.getExtract()));
+        return domTagger;
     }
 
     private Stream<Map.Entry<String, List<String>>> getMetadataFromUrl(String url, Importer imp) {

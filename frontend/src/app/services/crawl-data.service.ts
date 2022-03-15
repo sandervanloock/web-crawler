@@ -16,9 +16,9 @@ export class CrawlDataService {
     return this.http.get(`${environment.crawler.host}/data`, { params: new HttpParams({ fromObject: { siteId: site.id } }) });
   }
 
-  preview(url: string, config: string): Observable<any> {
+  preview(siteId: string, url: string): Observable<any> {
     const params = new HttpParams({ fromObject: { url: url } });
-    return this.http.post(`${environment.consumer.host}/preview`, config, {
+    return this.http.post(`${environment.consumer.host}/preview/${siteId}`,null, {
       params,
       headers: { 'Content-Type': 'application/xml' }
     });
