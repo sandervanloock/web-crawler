@@ -2,22 +2,31 @@ package be.sandervl.webcrawler.application.domain.crawler;
 
 import be.sandervl.webcrawler.application.HttpCollectorFactory;
 import com.norconex.collector.http.HttpCollector;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.concurrent.CompletableFuture;
+
+@Data
+@NoArgsConstructor
+class CrawlParams {
+}
 
 @RestController
 @RequestMapping("/crawler")
 @RequiredArgsConstructor
+@Slf4j
 public class CrawlerController {
 
     private final HttpCollectorFactory httpCollectorFactory;
+    private final SiteService siteService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     /**
      * Start a crawl with the given XML-config as request body
@@ -30,5 +39,37 @@ public class CrawlerController {
         HttpCollector httpCollector = httpCollectorFactory.createFromConfigString(config);
         CompletableFuture.runAsync(httpCollector::start);
         return httpCollector.getId();
+    }
+
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/{siteId}")
+    public String startWithCms(@PathVariable("siteId") Long siteId, @RequestBody(required = false) CrawlParams params) throws IOException {
+        var site = siteService.getSite(siteId).orElseThrow();
+        HttpCollector httpCollector = httpCollectorFactory.createFromConfigString(site.getData().getAttributes().getCrawlconfig());
+        httpCollector.getEventManager().addListener(evt -> {
+            CrawlerMessage crawlerMessage = CrawlerMessage.builder()
+                    .message(evt.getMessage())
+                    .build();
+            if (crawlerMessage.shouldSend()) {
+                log.debug("[CRAWLER] - {}", crawlerMessage);
+                simpMessagingTemplate.convertAndSend("/topic/" + siteId, crawlerMessage);
+            }
+        });
+        CompletableFuture.runAsync(httpCollector::start);
+        return "";
+    }
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    static class CrawlerMessage {
+        private String message;
+        @Builder.Default
+        private LocalDateTime date = LocalDateTime.now();
+
+        boolean shouldSend() {
+            return StringUtils.isNotBlank(message);
+        }
     }
 }

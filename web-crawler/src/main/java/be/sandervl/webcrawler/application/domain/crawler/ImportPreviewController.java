@@ -25,7 +25,7 @@ public class ImportPreviewController {
 
     private final SiteService siteService;
 
-    @PostMapping(consumes = MediaType.APPLICATION_XML_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, List<String>> start(@PathVariable("siteId") Long siteId, @QueryParam("url") String url) throws IOException {
         return siteService.getImporterConfig(siteId)
                 .map(config -> {

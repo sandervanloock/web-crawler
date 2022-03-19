@@ -1,5 +1,19 @@
 <div class="content">
-    <button color="accent" mat-raised-button>
-        start
+  <form #inputForm="ngForm" fxFlex="50%" fxLayout="column">
+    <mat-form-field appearance="fill">
+      <mat-label>Start URL</mat-label>
+      <input [(ngModel)]="startingUrl" matInput name="startingUrl" required type="url">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Amount of documents</mat-label>
+      <input [(ngModel)]="mntDocuments" matInput name="mntDocuments" required type="number">
+    </mat-form-field>
+    <button (click)="crawl()" [disabled]="inputForm.invalid || this.loading" color="accent" mat-raised-button
+            type="submit">
+      start
     </button>
+  </form>
+  <div fxFlex="50%">
+    <app-crawl-data-log [messages]="$crawlMessages.asObservable()"></app-crawl-data-log>
+  </div>
 </div>
