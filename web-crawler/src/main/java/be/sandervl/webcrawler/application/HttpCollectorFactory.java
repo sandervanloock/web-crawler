@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -31,6 +32,7 @@ public class HttpCollectorFactory {
 
     public HttpCollector createFromConfigString(String input) throws IOException {
         HttpCollectorConfig config = createFromString(input);
+        config.setId(UUID.randomUUID().toString());
 //        config.setLogsDir(CrawlerConstants.LOGS_DIRECTORY + "/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyddMMhhmmss")));
 //        config.setProgressDir(CrawlerConstants.PROGRESS_DIRECTORY);
         return new HttpCollector(config);

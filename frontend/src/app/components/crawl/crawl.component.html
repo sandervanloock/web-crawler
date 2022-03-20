@@ -6,9 +6,14 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Amount of documents</mat-label>
-      <input [(ngModel)]="mntDocuments" matInput name="mntDocuments" required type="number">
+      <input [(ngModel)]="amount" matInput name="mntDocuments" required type="number">
     </mat-form-field>
-    <button (click)="crawl()" [disabled]="inputForm.invalid || this.loading" color="accent" mat-raised-button
+    <mat-form-field appearance="fill">
+      <mat-label>Depth</mat-label>
+      <input [(ngModel)]="depth" matInput name="depth" required type="number">
+    </mat-form-field>
+    <button (click)="crawl()" [disabled]="inputForm.invalid || this.loading || this.isCrawling" color="accent"
+            mat-raised-button
             type="submit">
       start
     </button>

@@ -23,6 +23,12 @@
       "relation": "oneToMany",
       "target": "api::crawl-field.crawl-field",
       "mappedBy": "site"
+    },
+    "startingUrl": {
+      "type": "string"
+    },
+    "linkExtractorSelector": {
+      "type": "string"
     }
   }
 }

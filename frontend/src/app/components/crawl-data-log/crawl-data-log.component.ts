@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CrawlMessage} from "../../models/crawl-message";
 import {MatTable, MatTableDataSource} from "@angular/material/table";
 import {Observable} from "rxjs";
@@ -9,14 +9,14 @@ import {MatPaginator} from "@angular/material/paginator";
   templateUrl: './crawl-data-log.component.html',
   styleUrls: ['./crawl-data-log.component.scss']
 })
-export class CrawlDataLogComponent implements OnInit, AfterViewInit {
+export class CrawlDataLogComponent implements OnInit {
 
   @Input() messages = new Observable<CrawlMessage>();
   sortedMessages: CrawlMessage[] = [];
   dataSource = new MatTableDataSource<CrawlMessage>(this.sortedMessages);
-  displayedColumns: string[] = ['message', 'date'];
-  @ViewChild(MatTable) table!: MatTable<CrawlMessage[]>;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  displayedColumns: string[] = ['name', 'message', 'date'];
+  @ViewChild(MatTable) table: MatTable<CrawlMessage[]> | undefined;
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   constructor() {
   }
@@ -29,13 +29,11 @@ export class CrawlDataLogComponent implements OnInit, AfterViewInit {
       console.log(`[LOG COMPONENT]`, newMessages);
       this.sortedMessages = newMessages;
       this.dataSource = new MatTableDataSource<CrawlMessage>(this.sortedMessages);
-      this.table.renderRows();
-      this.dataSource.paginator = this.paginator;
+      this.table?.renderRows();
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator!;
+      }
     })
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
   }
 
   compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {

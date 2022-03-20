@@ -4,6 +4,12 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {ISite} from "../models";
 import {environment} from '../../environments/environment';
 
+export interface CrawlParams {
+  depth: number;
+  amount: number;
+  startingUrl?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -24,8 +30,8 @@ export class CrawlDataService {
     });
   }
 
-  crawl(siteId: string) {
-    return this.http.post(`${environment.consumer.host}/crawler/${siteId}`, null, {
+  crawl(siteId: string, crawlParams: CrawlParams) {
+    return this.http.post(`${environment.consumer.host}/crawler/${siteId}`, crawlParams, {
       headers: {'Content-Type': 'application/json'}
     });
   }

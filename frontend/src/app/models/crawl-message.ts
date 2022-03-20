@@ -1,4 +1,5 @@
 export interface CrawlMessage {
-  message: string,
+  name: string,
+  message?: string,
   date: Date
 }

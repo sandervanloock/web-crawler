@@ -15,9 +15,11 @@ import {Subject} from "rxjs";
 export class CrawlComponent implements OnInit {
   site?: ISite;
   loading = false;
+  isCrawling = false;
   $crawlMessages = new Subject<CrawlMessage>();
   startingUrl: string | undefined;
-  mntDocuments: number | undefined;
+  amount: number = 100;
+  depth: number = 1;
 
   constructor(private crawlService: CrawlDataService, private siteStore: SiteStoreService) {
   }
@@ -28,6 +30,7 @@ export class CrawlComponent implements OnInit {
     this.siteStore.site$.subscribe(site => {
       this.loading = false;
       this.site = site;
+      this.startingUrl = site.startingUrl;
       // @ts-ignore
       const sock: SockJS = new SockJS('http://localhost:8081/websocket');
       const stompClient = Stomp.over(sock);
@@ -35,7 +38,7 @@ export class CrawlComponent implements OnInit {
         stompClient.subscribe(`/topic/${this.site?.id}`, (rawMessage) => {
           const message = JSON.parse(rawMessage.body) as CrawlMessage;
           this.$crawlMessages.next(message);
-          this.loading = true;
+          this.isCrawling = message.name !== 'COLLECTOR_RUN_END';
         });
       });
     });
@@ -44,10 +47,15 @@ export class CrawlComponent implements OnInit {
 
   crawl(): void {
     if (this.site) {
-      this.loading = true
-      this.crawlService.crawl(this.site.id)
+      this.loading = true;
+      this.isCrawling = true;
+      this.crawlService.crawl(this.site.id, {
+        depth: this.depth,
+        amount: this.amount,
+        startingUrl: this.startingUrl
+      })
         .subscribe(res => {
-          // this.loading = false;
+          this.loading = false;
         });
     }
   }

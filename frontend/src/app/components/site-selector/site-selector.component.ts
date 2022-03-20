@@ -1,9 +1,9 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { SiteService } from "../../services/site.service";
-import { map } from "rxjs/operators";
-import { Observable } from "rxjs";
-import { ISite } from "../../models";
-import { SiteStoreService } from "../../services/site-store.service";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {SiteService} from "../../services/site.service";
+import {map} from "rxjs/operators";
+import {Observable} from "rxjs";
+import {ISite} from "../../models";
+import {SiteStoreService} from "../../services/site-store.service";
 
 @Component({
   selector: 'app-site-selector',
@@ -36,7 +36,8 @@ export class SiteSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.$sites = this.siteService.getSites().pipe(map(res => res.data.map(it => {
-      const site: ISite = { id: `${it.id}`, name: it.attributes.name }
+      const site: ISite = {...it.attributes}
+      site.id = `${it.id}`;
       return site;
     })));
   }
