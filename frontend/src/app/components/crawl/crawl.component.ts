@@ -18,9 +18,8 @@ export class CrawlComponent implements OnInit {
   isCrawling = false;
   $crawlMessages = new Subject<CrawlMessage>();
   startingUrl: string | undefined;
-  amount: number = 100;
+  amount: number = 10;
   depth: number = 1;
-
   constructor(private crawlService: CrawlDataService, private siteStore: SiteStoreService) {
   }
 

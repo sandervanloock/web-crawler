@@ -1,5 +1,5 @@
 <div class="content">
-  <form #inputForm="ngForm" fxFlex="50%" fxLayout="column">
+  <form #inputForm="ngForm" fxFlex="33%" fxLayout="column">
     <mat-form-field appearance="fill">
       <mat-label>Start URL</mat-label>
       <input [(ngModel)]="startingUrl" matInput name="startingUrl" required type="url">
@@ -18,7 +18,7 @@
       start
     </button>
   </form>
-  <div fxFlex="50%">
+  <div fxFlex="66%">
     <app-crawl-data-log [messages]="$crawlMessages.asObservable()"></app-crawl-data-log>
   </div>
 </div>

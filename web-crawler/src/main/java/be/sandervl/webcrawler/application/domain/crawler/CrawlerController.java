@@ -3,7 +3,6 @@ package be.sandervl.webcrawler.application.domain.crawler;
 import be.sandervl.webcrawler.application.HttpCollectorFactory;
 import com.norconex.collector.http.HttpCollector;
 import com.norconex.collector.http.crawler.HttpCrawlerConfig;
-import com.norconex.collector.http.link.Link;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 @Data
@@ -57,7 +55,7 @@ public class CrawlerController {
             if (crawlerConfig instanceof HttpCrawlerConfig) {
                 HttpCrawlerConfig httpCrawlerConfig = (HttpCrawlerConfig) crawlerConfig;
                 httpCrawlerConfig.setMaxDepth(params.getDepth());
-                httpCrawlerConfig.setLinkExtractors(crawlDoc -> Set.of(new Link(params.getStartingUrl())));
+                httpCrawlerConfig.setStartURLs(params.getStartingUrl());
             }
         });
         httpCollector.getEventManager().addListener(evt -> {

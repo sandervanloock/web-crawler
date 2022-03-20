@@ -18,6 +18,9 @@ export class CrawlDataLogComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<CrawlMessage[]> | undefined;
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
+  countPerEvent = new Map<string, number>();
+  summaryData: [string, number][] = [];
+
   constructor() {
   }
 
@@ -26,13 +29,20 @@ export class CrawlDataLogComponent implements OnInit {
       const newMessages = this.sortedMessages;
       newMessages.push(m);
       newMessages.sort((a: CrawlMessage, b: CrawlMessage) => this.compare(a.date, b.date, false));
-      console.log(`[LOG COMPONENT]`, newMessages);
       this.sortedMessages = newMessages;
       this.dataSource = new MatTableDataSource<CrawlMessage>(this.sortedMessages);
       this.table?.renderRows();
       if (this.paginator) {
         this.dataSource.paginator = this.paginator!;
       }
+
+      const existingRecord = this.countPerEvent.get(m.name);
+      if (existingRecord) {
+        this.countPerEvent.set(m.name, existingRecord + 1);
+      } else {
+        this.countPerEvent.set(m.name, 1);
+      }
+      this.summaryData = [...this.countPerEvent.entries()];
     })
   }
 
