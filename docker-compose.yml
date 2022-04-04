@@ -15,23 +15,6 @@ services:
       - "discovery.type=single-node"
     links:
       - kibana
-  demo-site:
-    image: nginx
-    ports:
-      - "8080:80"
-    volumes:
-      - ./demo-site:/usr/share/nginx/html:ro
-  jef-monitor:
-    image: openjdk:8u102-jdk
-    ports:
-      - "8099:8082"
-    volumes:
-      - ./norconex-jef-monitor:/home
-      - ./data:/data
-    working_dir: /home
-    environment:
-      - ROOT_DIR=/home
-    command: java -Dlog4j.configuration="file:///home/classes/log4j.properties" -Dfile.encoding=UTF8 -cp "./lib/*:./classes" com.norconex.jefmon.server.JEFMonServer
   database:
     image: mysql:8.0
     ports:
