@@ -1,7 +1,7 @@
-package be.sandervl.crawler;
+package be.sandervl.webcrawler.application.domain.site;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import be.sandervl.webcrawler.application.domain.site.model.Site;
+import be.sandervl.webcrawler.application.domain.strapi.model.StrapiResultWrapper;
 import lombok.val;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -14,8 +14,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,57 +40,5 @@ public class SiteService {
         return Optional.empty();
     }
 
-    @Data
-    static class StrapiResultWrapper<T extends BaseStrapiObject> {
-        private StrapiObjectWrapper<T> data;
-        private StrapiMeta meta;
-    }
-
-    @Data
-    static class StrapiPageWrapper<T extends BaseStrapiObject> {
-        private List<StrapiObjectWrapper<T>> data;
-        private StrapiMeta meta;
-    }
-
-    @Data
-    static class StrapiObjectWrapper<T extends BaseStrapiObject> {
-        private Long id;
-        private T attributes;
-    }
-
-    @Data
-    static class Site extends BaseStrapiObject {
-        //        private Long id;
-        private String name;
-        @JsonProperty("crawlFields")
-        private StrapiPageWrapper<CrawlField> crawlFields;
-    }
-
-    @Data
-    static class CrawlField extends BaseStrapiObject {
-        private String name;
-        private String selector;
-        private String extract;
-    }
-
-    @Data
-    static class StrapiMeta {
-        private StrapiPage pagination;
-    }
-
-    @Data
-    static class StrapiPage {
-        private int page;
-        private int pageSize;
-        private int pageCount;
-        private int total;
-    }
-
-    @Data
-    static class BaseStrapiObject {
-        //        private long id;
-        private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
-    }
 }
 

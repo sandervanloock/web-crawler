@@ -1,5 +1,7 @@
-package be.sandervl.webcrawler.application.domain.crawler;
+package be.sandervl.webcrawler.application.domain.crawler.controller;
 
+import be.sandervl.webcrawler.application.domain.crawler.HttpCollectorBuilder;
+import be.sandervl.webcrawler.application.domain.site.SiteService;
 import com.norconex.importer.Importer;
 import com.norconex.importer.ImporterRequest;
 import com.norconex.importer.response.ImporterResponse;
@@ -24,14 +26,14 @@ import java.util.Map;
 public class ImportPreviewController {
 
     private final SiteService siteService;
+    private final HttpCollectorBuilder httpCollectorBuilder;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<String, List<String>> start(@PathVariable("siteId") Long siteId, @QueryParam("url") String url) throws IOException {
-        return siteService.getImporterConfig(siteId)
-                .map(config -> {
-                    Importer importer = new Importer(config);
-                    return getMetadataFromUrl(url, importer);
-                })
+    public Map<String, List<String>> start(@PathVariable("siteId") Long siteId, @QueryParam("url") String url) {
+        CrawlerController.CrawlParams params = CrawlerController.CrawlParams.builder().startingUrl(url).amount(1).build();
+        return httpCollectorBuilder.getHttpCollectorConfig(siteId, params)
+                .flatMap(httpCollectorBuilder::createImporter)
+                .map(importer -> getMetadataFromUrl(url, importer))
                 .orElse(Collections.emptyMap());
     }
 
