@@ -15,12 +15,14 @@ import com.norconex.collector.http.url.impl.GenericURLNormalizer;
 import com.norconex.committer.core3.batch.queue.impl.FSQueue;
 import com.norconex.committer.elasticsearch.ElasticsearchCommitter;
 import com.norconex.commons.lang.map.PropertySetter;
+import com.norconex.commons.lang.text.TextMatcher;
 import com.norconex.importer.Importer;
 import com.norconex.importer.ImporterConfig;
 import com.norconex.importer.handler.HandlerConsumer;
 import com.norconex.importer.handler.IImporterHandler;
 import com.norconex.importer.handler.tagger.impl.CurrentDateTagger;
 import com.norconex.importer.handler.tagger.impl.DOMTagger;
+import com.norconex.importer.handler.tagger.impl.DeleteTagger;
 import com.norconex.importer.handler.tagger.impl.URLExtractorTagger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.BeanFactory;
@@ -83,9 +85,9 @@ public class HttpCollectorBuilder {
         List<IImporterHandler> handlers = createHandlersForSite(site);
         ImporterConfig importerConfig = new ImporterConfig();
         importerConfig.setPreParseConsumer(HandlerConsumer.fromHandlers(handlers));
-//        DeleteTagger deleteTagger = new DeleteTagger();
-//        deleteTagger.setFieldMatcher(new TextMatcher("(^(?!vrtnws|@timestamp).+$)", TextMatcher.Method.REGEX));
-//        importerConfig.setPostParseConsumer(HandlerConsumer.fromHandlers(List.of(deleteTagger)));
+        DeleteTagger deleteTagger = new DeleteTagger();
+        deleteTagger.setFieldMatcher(new TextMatcher(String.format("(^(?!%s|%s).+$)", site.getName(), TIMESTAMP_FIELD), TextMatcher.Method.REGEX));
+        importerConfig.setPostParseConsumer(HandlerConsumer.fromHandlers(List.of(deleteTagger)));
         return importerConfig;
     }
 
@@ -95,7 +97,7 @@ public class HttpCollectorBuilder {
         committer.setDotReplacement("_");
         committer.setFixBadIds(true);
         committer.setTargetContentField("body");
-        committer.setSourceIdField("vrtnws_url");
+        committer.setSourceIdField("vrtnws.url");
         FSQueue committerQueue = new FSQueue();
         committerQueue.setBatchSize(3);
         committer.setCommitterQueue(committerQueue);

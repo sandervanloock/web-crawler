@@ -1,10 +1,14 @@
 package be.sandervl.webcrawler.application.elasticsearch;
 
-import com.norconex.committer.core3.*;
+import com.norconex.committer.core3.CommitterException;
+import com.norconex.committer.core3.CommitterUtil;
+import com.norconex.committer.core3.ICommitterRequest;
+import com.norconex.committer.core3.UpsertRequest;
 import com.norconex.committer.elasticsearch.ElasticsearchCommitter;
 import com.norconex.commons.lang.text.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -13,8 +17,6 @@ import org.apache.http.HttpStatus;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,6 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is a custom ElasticsearchCommitter that is able to use data-streams in Elastic Search
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -32,25 +37,41 @@ public class MyElasticSearchCommitter extends ElasticsearchCommitter {
 
     @Override
     protected void commitBatch(Iterator<ICommitterRequest> it) throws CommitterException {
-        StringBuilder json = new StringBuilder();
 
         int docCount = 0;
         try {
             while (it.hasNext()) {
                 ICommitterRequest req = it.next();
+                StringBuilder json = new StringBuilder();
                 if (req instanceof UpsertRequest) {
-                    addBulkCreate(json, (UpsertRequest) req);
+                    Request deleteRequest = new Request("POST", "/" + getIndexName() + "/_delete_by_query");
+                    deleteRequest.setJsonEntity("" +
+                            "                    {\n" +
+                            "                        \"query\": {\n" +
+                            "                        \"match\": {\n" +
+                            "                            \"_id\": \"" + extractId(req) + "\"\n" +
+                            "                        }\n" +
+                            "                    }\n" +
+                            "                    }");
+                    Response deleteResponse = restClient.performRequest(deleteRequest);
+
+// SEE https://www.elastic.co/guide/en/elasticsearch/reference/current/use-a-data-stream.html#add-documents-to-a-data-stream => you cannot set _ID with bulk request
+                    Request request = new Request("PUT", "/" + getIndexName() + "/_create/" + extractId(req));
+                    setBodyForUpsertRequest(json, (UpsertRequest) req);
+                    request.setJsonEntity(json.toString());
+                    Response response = restClient.performRequest(request);
+                    handleResponse(response);
+                    //addBulkCreate(json, (UpsertRequest) req);
                 } else {
                     throw new CommitterException("Unsupported request: " + req);
                 }
                 docCount++;
             }
-            log.debug("JSON POST:\n{}", StringUtils.trim(json.toString()));
-
-            Request request = new Request("PUT", "/"+getIndexName()+"/_bulk?refresh");
-            request.setJsonEntity(json.toString());
-            Response response = restClient.performRequest(request);
-            handleResponse(response);
+            //log.debug("JSON POST:\n{}", StringUtils.trim(json.toString()));
+            //Request request = new Request("PUT", "/"+getIndexName()+"/_bulk?refresh");
+            //request.setJsonEntity(json.toString());
+            //Response response = restClient.performRequest(request);
+            //handleResponse(response);
             log.info("Sent {} commit operations to Elasticsearch.", docCount);
         } catch (CommitterException e) {
             throw e;
@@ -66,15 +87,16 @@ public class MyElasticSearchCommitter extends ElasticsearchCommitter {
 
         CommitterUtil.applyTargetContent(req, getTargetContentField());
 
-        json.append("{\"create\":{}}\n{");
+        json.append("{\"create\":{}}\n");
+        setBodyForUpsertRequest(json, req);
+    }
+
+    private void setBodyForUpsertRequest(StringBuilder json, UpsertRequest req) {
+        json.append("{");
         boolean first = true;
         for (Map.Entry<String, List<String>> entry : req.getMetadata().entrySet()) {
             String field = entry.getKey();
             field = StringUtils.replace(field, ".", getDotReplacement());
-            // Do not store _id as a field since it is passed above already.
-            if (field.equals(ELASTICSEARCH_ID_FIELD)) {
-                continue;
-            }
             if (!first) {
                 json.append(',');
             }
@@ -104,8 +126,8 @@ public class MyElasticSearchCommitter extends ElasticsearchCommitter {
     }
 
     private String extractId(ICommitterRequest req) throws CommitterException {
-        return fixBadIdValue(
-                CommitterUtil.extractSourceIdValue(req, getSourceIdField()));
+        return Base64.encodeBase64String(fixBadIdValue(
+                CommitterUtil.extractSourceIdValue(req, getSourceIdField(), true)).getBytes());
     }
 
     private String fixBadIdValue(String value) throws CommitterException {
@@ -174,7 +196,7 @@ public class MyElasticSearchCommitter extends ElasticsearchCommitter {
             log.debug("Elasticsearch response status: {}",
                     response.getStatusLine());
         }
-        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+        if (response.getStatusLine().getStatusCode() != HttpStatus.SC_CREATED) {
             throw new CommitterException(
                     "Invalid HTTP response: " + response.getStatusLine());
         }

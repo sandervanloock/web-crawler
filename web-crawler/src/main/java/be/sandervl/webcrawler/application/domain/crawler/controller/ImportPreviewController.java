@@ -1,7 +1,6 @@
 package be.sandervl.webcrawler.application.domain.crawler.controller;
 
 import be.sandervl.webcrawler.application.domain.crawler.HttpCollectorBuilder;
-import be.sandervl.webcrawler.application.domain.site.SiteService;
 import com.norconex.importer.Importer;
 import com.norconex.importer.ImporterRequest;
 import com.norconex.importer.response.ImporterResponse;
@@ -25,7 +24,6 @@ import java.util.Map;
 @Slf4j
 public class ImportPreviewController {
 
-    private final SiteService siteService;
     private final HttpCollectorBuilder httpCollectorBuilder;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
